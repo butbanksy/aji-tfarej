@@ -8,7 +8,7 @@ export const AppNavigator = () => {
     const authState = useSelector((state) => state.auth);
     return (
         <NavigationContainer>
-            {authState.isLoggedIn ? <HomeStack/> : <AuthStack/>}
+            {!authState.isLoggedIn ? <HomeStack/> : <AuthStack/>}
         </NavigationContainer>
     );
 };

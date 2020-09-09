@@ -5,8 +5,8 @@ import Home from "../../screens/Home";
 const {Navigator, Screen} = createStackNavigator();
 
 const HomeStack = () => (
-    <Navigator initialRouteName="Login">
+    <Navigator initialRouteName="Login" screenOptions={{headerShown: false}}>
         <Screen name="Home" component={Home}/>
     </Navigator>
-)
-export default HomeStack
+);
+export default HomeStack;

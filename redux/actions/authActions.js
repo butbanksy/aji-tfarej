@@ -2,7 +2,7 @@ import {
   SET_TOKEN,
   LOGIN_REQUEST,
   LOGIN_REQUEST_FAIL,
-  LOGIN_REQUEST_SUCCESS, REVOKE_TOKEN,
+  LOGIN_REQUEST_SUCCESS, REVOKE_TOKEN, CHANGE_THEME,
 } from "./actionTypes";
 import { BASE_URL } from "../../constants";
 import axios from "axios";
@@ -34,6 +34,7 @@ export const loginRequestFail = (error) => ({
   type: LOGIN_REQUEST_FAIL,
   payload: error,
 });
+
 
 export const login = ({ email, password }) => {
   return (dispatch) => {

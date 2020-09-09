@@ -5,11 +5,13 @@ import {Surface} from "react-native-paper";
 import {useForm} from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
 import {login} from "../redux/actions/authActions";
+import {changeTheme} from "../redux/actions/themeActions";
 
 const {width} = Dimensions.get("window");
 
 export default function Login() {
     const authState = useSelector(state => state.auth);
+    const {theme} = useSelector(state => state.theme)
     const {register, handleSubmit, setValue} = useForm();
     const dispatch = useDispatch();
 
@@ -34,6 +36,8 @@ export default function Login() {
                 onChangeText={(text) => setValue("password", text)}
             />
             <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
+            <Button onPress={() => dispatch(changeTheme(theme))}>Change Theme</Button>
+
             <Text style={{color: "red", textAlign: "center"}}>{authState.error}</Text>
         </Surface>
     );

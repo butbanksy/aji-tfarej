@@ -1,4 +1,5 @@
 import {
+    CHANGE_THEME,
     LOGIN_REQUEST,
     LOGIN_REQUEST_FAIL,
     LOGIN_REQUEST_SUCCESS,
@@ -11,19 +12,16 @@ const initialState = {
     isLoggedIn: false,
     token: "",
     error: "",
-    theme: "light",
 }
 
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SET_TOKEN: {
-            return {
-                isLoggedIn: true,
-                token: action.payload,
-            }
-        }
         case REVOKE_TOKEN: {
-            return initialState
+            return {
+                ...state,
+                isLoggedIn: false,
+                token: "",
+            }
         }
         case LOGIN_REQUEST : {
             return {
@@ -33,6 +31,7 @@ const authReducer = (state = initialState, action) => {
         }
         case LOGIN_REQUEST_SUCCESS : {
             return {
+                ...state,
                 isLoggedIn: true,
                 loading: false,
                 token : action.payload,
