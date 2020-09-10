@@ -12,6 +12,7 @@ import { Header } from "../components/common/Header";
 import SearchBar from "../components/common/SearchBar";
 import { changeTheme } from "../redux/actions/themeActions";
 import SuggestedMovie from "../components/movies/SuggestedMovies";
+import {revokeToken} from "../redux/actions/authActions";
 
 export default function Home() {
   const { colors } = useTheme();
@@ -53,16 +54,26 @@ export default function Home() {
         <Surface style={[styles.defaultBackground, { padding: -20 }]}>
           <SuggestedMovie />
         </Surface>
-        <View style={{ flex: 1, alignItems: "center", marginTop: 250 }}>
+        <View style={{ flex: 1, alignItems: "center", marginTop: 200}}>
           <Button
             mode="contained"
             compact={true}
             uppercase={false}
-            style={{ width: "50%" }}
+            style={{ width: "50%", margin: 10 }}
             labelStyle={{ fontFamily: "Inter_600SemiBold" }}
             onPress={() => dispatch(changeTheme(theme))}
           >
               {theme === "light" ? "Toggle Dark Theme" : "Toggle Light Theme"}
+          </Button>
+          <Button
+            mode="contained"
+            compact={true}
+            uppercase={false}
+            style={{ width: "50%", margin: 10 }}
+            labelStyle={{ fontFamily: "Inter_600SemiBold" }}
+            onPress={() => dispatch(revokeToken())}
+          >
+              Logout
           </Button>
         </View>
       </ScrollView>

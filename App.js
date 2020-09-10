@@ -1,6 +1,7 @@
 import React from "react";
 import {Provider} from "react-redux";
-import configureStore from "./redux/store";
+import {store, persistor} from "./redux/store";
+import { PersistGate } from 'redux-persist/integration/react';
 import {StatusBar} from "expo-status-bar";
 import Main from "./Main";
 import {
@@ -17,11 +18,7 @@ import {
 } from "@expo-google-fonts/inter";
 import {ActivityIndicator} from "react-native-paper";
 
-const store = configureStore();
-
-
 export default function App() {
-
     let [fontsLoaded] = useFonts({
         Inter_100Thin,
         Inter_200ExtraLight,
@@ -34,10 +31,14 @@ export default function App() {
         Inter_900Black,
     });
 
-    return fontsLoaded ?
+    return fontsLoaded ? (
         <Provider store={store}>
-            <StatusBar translucent={false} style="light" hidden={true}/>
-            <Main/>
-        </Provider> : <ActivityIndicator/>
-    ;
+            <PersistGate loading={null} persistor={persistor}>
+                <StatusBar translucent={false} style="light" hidden={true}/>
+                <Main/>
+            </PersistGate>
+        </Provider>
+    ) : (
+        <ActivityIndicator/>
+    );
 }

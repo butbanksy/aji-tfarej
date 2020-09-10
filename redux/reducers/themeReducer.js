@@ -2,8 +2,8 @@ import {CHANGE_THEME, CHANGE_THEME_DARK, CHANGE_THEME_LIGHT} from "../actions/ac
 import {darkTheme, defaultTheme} from "../../theming/theme";
 
 const initialState = {
-    theme: "dark",
-    colors: darkTheme
+    theme: "light",
+    colors: defaultTheme
 }
 
 const themeReducer = (state= initialState, action) => {
