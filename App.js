@@ -1,7 +1,7 @@
 import React from "react";
 import {Provider} from "react-redux";
 import {store, persistor} from "./redux/store";
-import { PersistGate } from 'redux-persist/integration/react';
+import {PersistGate} from "redux-persist/integration/react";
 import {StatusBar} from "expo-status-bar";
 import Main from "./Main";
 import {
@@ -17,8 +17,11 @@ import {
     useFonts,
 } from "@expo-google-fonts/inter";
 import {ActivityIndicator} from "react-native-paper";
+import axios from "axios";
+import {BASE_API_URL} from "./constants";
 
 export default function App() {
+
     let [fontsLoaded] = useFonts({
         Inter_100Thin,
         Inter_200ExtraLight,

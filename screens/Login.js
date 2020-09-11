@@ -32,6 +32,7 @@ export default function Login() {
                 onChangeText={(text) => setValue("email", text)}
             />
             <TextInput
+                secureTextEntry={true}
                 label="Password"
                 onChangeText={(text) => setValue("password", text)}
             />

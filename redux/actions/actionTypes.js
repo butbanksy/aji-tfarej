@@ -9,3 +9,7 @@ export const LOGIN_REQUEST_FAIL = "LOGIN_REQUEST_FAIL";
 export const CHANGE_THEME = "CHANGE_THEME"
 export const CHANGE_THEME_DARK = "CHANGE_THEME_DARK"
 export const CHANGE_THEME_LIGHT = "CHANGE_THEME_LIGHT"
+
+// User actions
+
+export const LOAD_USER_INFOS = "LOAD_USER_INFOS"

@@ -1,15 +1,28 @@
 import React from "react";
 import {StyleSheet, View} from "react-native";
-import {Text, Surface, Avatar, Button} from "react-native-paper";
+import {Avatar, TouchableRipple} from "react-native-paper";
 import {useSelector} from "react-redux";
+import {BASE_URL} from "../../constants";
+import {useNavigation} from "@react-navigation/native";
 
 export const Header = () => {
-
+    const navigation = useNavigation();
     const {colors} = useSelector((state) => state.theme.colors);
+    const {image} = useSelector((state) => state.user.user);
     return (
         <View style={styles.headerContainer}>
-            <Avatar.Icon size={40} icon="menu" style={{backgroundColor: colors.background}} onPress={()=>console.log(colors.background)}/>
-            <Avatar.Image size={40} source={require("../../assets/travis.jpg")}/>
+            <Avatar.Icon
+                size={40}
+                icon="menu"
+                style={{backgroundColor: colors.background}}
+            />
+                <TouchableRipple
+                    onPress={() => navigation.navigate("Profile")}
+                    rippleColor="rgba(0, 0, 0, .0)"
+                >
+                    <Avatar.Image size={40} source={{uri: BASE_URL + image}}/>
+                </TouchableRipple>
+
         </View>
     );
 };
