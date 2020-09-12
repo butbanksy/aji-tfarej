@@ -9,6 +9,7 @@ export const Header = () => {
     const navigation = useNavigation();
     const {colors} = useSelector((state) => state.theme.colors);
     const {image} = useSelector((state) => state.user.user);
+
     return (
         <View style={styles.headerContainer}>
             <Avatar.Icon

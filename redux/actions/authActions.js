@@ -42,7 +42,7 @@ export const login = ({email, password}) => {
     return (dispatch) => {
         dispatch(loginRequest());
         axios
-            .post("/login", {
+            .post(BASE_API_URL+"/login", {
                 email,
                 password,
             })

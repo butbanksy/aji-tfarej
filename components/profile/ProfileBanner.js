@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from "react";
-import {View, StyleSheet, Dimensions, Image, Button} from "react-native";
+import React, {useEffect, useState} from "react";
+import {Dimensions, StyleSheet, View} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 import * as ImagePicker from "expo-image-picker";
-import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
-import {useTheme, Avatar, TouchableRipple, Text} from "react-native-paper";
-import {BASE_API_URL, BASE_URL, headersConfig} from "../../constants";
+import {Avatar, Text, TouchableRipple, useTheme} from "react-native-paper";
+import {BASE_URL} from "../../constants";
 import axios from "axios";
+import {setUserInfosRequest} from "../../redux/actions/userActions";
 
 const ProfileBanner = () => {
     const {colors} = useTheme();
@@ -26,7 +26,7 @@ const ProfileBanner = () => {
     });
 
     const [image, setImage] = useState(null);
-    const {token} = useSelector((state) => state.auth);
+    const userState = useSelector(state => state.user.user)
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -73,7 +73,7 @@ const ProfileBanner = () => {
                     .post("/photo", formData, {
                         "Content-Type": "multipart/form-data",
                     })
-                    .then((resp) => console.log(resp));
+                    .then((resp) => dispatch(setUserInfosRequest(resp.data)));
             }
         } catch (E) {
             console.log(E);
@@ -81,10 +81,19 @@ const ProfileBanner = () => {
     };
     return (
         <View style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
-            <Button title="Pick an image from camera roll!" onPress={pickImage}/>
+            <TouchableRipple
+                onPress={pickImage}
+                rippleColor="rgba(0, 0, 0, .0)"
+            >
+                <Avatar.Image size={80} source={image ? {uri: image} : {uri: BASE_URL + userState.image}}/>
+            </TouchableRipple>
+            <View style={{marginTop: 10}}>
+                <Text style={{fontSize: 19, fontFamily: "Inter_900Black"}}>{userState.name}</Text>
+            </View>
+            {/*<Button title="Pick an image from camera roll!" onPress={pickImage}/>
             {image && (
                 <Image source={{uri: image}} style={{width: 200, height: 200}}/>
-            )}
+            )}*/}
         </View>
     );
 };
