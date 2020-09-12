@@ -37,7 +37,7 @@ export default function App() {
     return fontsLoaded ? (
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-                <StatusBar translucent={false} style="light" hidden={true}/>
+                <StatusBar translucent={false} style="light" hidden={false}/>
                 <Main/>
             </PersistGate>
         </Provider>

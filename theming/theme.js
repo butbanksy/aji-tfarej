@@ -8,7 +8,7 @@ export const darkTheme = {
     ...DarkTheme,
     colors: {
         ...DarkTheme.colors,
-        primary: "#ff8f56"
+        primary: "#49A078"
     }
 }
 
@@ -16,6 +16,6 @@ export const defaultTheme = {
     ...DefaultTheme,
     colors: {
         ...DefaultTheme.colors,
-        primary: "#ff8f56"
+        primary: "#49A078"
     }
 }

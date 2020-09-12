@@ -18,6 +18,7 @@ import {revokeToken} from "../redux/actions/authActions";
 import axios from "axios";
 import {BASE_API_URL} from "../constants";
 import {setAxiosToken} from "../constants/axiosConfig";
+import {setUserInfosRequest} from "../redux/actions/userActions";
 
 export default function Home() {
     const navigation = useNavigation();
@@ -48,7 +49,16 @@ export default function Home() {
         },
     });
 
-    useEffect(() => setAxiosToken(token), []);
+    useEffect(() => {
+        setAxiosToken(token);
+        axios
+            .post("/token")
+            .then((resp) => {
+                console.log(resp.data);
+                dispatch(setUserInfosRequest(resp.data));
+            })
+            .catch(() => dispatch(revokeToken()));
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -63,28 +73,6 @@ export default function Home() {
                 <Surface style={[styles.defaultBackground, {padding: -20}]}>
                     <SuggestedMovie/>
                 </Surface>
-                <View style={{flex: 1, alignItems: "center", marginTop: 200}}>
-                    <Button
-                        mode="contained"
-                        compact={true}
-                        uppercase={false}
-                        style={{width: "50%", margin: 10}}
-                        labelStyle={{fontFamily: "Inter_600SemiBold"}}
-                        onPress={() => dispatch(changeTheme(theme))}
-                    >
-                        {theme === "light" ? "Toggle Dark Theme" : "Toggle Light Theme"}
-                    </Button>
-                    <Button
-                        mode="contained"
-                        compact={true}
-                        uppercase={false}
-                        style={{width: "50%", margin: 10}}
-                        labelStyle={{fontFamily: "Inter_600SemiBold"}}
-                        onPress={() => dispatch(revokeToken())}
-                    >
-                        Logout
-                    </Button>
-                </View>
             </ScrollView>
         </View>
     );

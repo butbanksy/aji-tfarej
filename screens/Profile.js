@@ -3,6 +3,7 @@ import {Dimensions, StyleSheet, View} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 import {useTheme} from "react-native-paper";
 import ProfileBanner from "../components/profile/ProfileBanner";
+import ListSettings from "../components/profile/ListSettings";
 
 const Profile = () => {
     const {colors} = useTheme();
@@ -21,9 +22,14 @@ const Profile = () => {
             backgroundColor: colors.background,
         },
         profileBanner: {
-            width: "100%",
+            width,
             height: height/3,
             backgroundColor: "#49A078",
+        },
+        listSettings: {
+            width,
+            paddingLeft: 10,
+
         }
     });
 
@@ -34,6 +40,9 @@ const Profile = () => {
         <View style={styles.container}>
             <View style={styles.profileBanner}>
                 <ProfileBanner/>
+            </View>
+            <View style={styles.listSettings}>
+            <ListSettings/>
             </View>
         </View>
     );

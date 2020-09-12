@@ -23,15 +23,31 @@ const ProfileBanner = () => {
         defaultBackground: {
             backgroundColor: colors.background,
         },
+        actionsCounter: {
+            width: "80%",
+            flexDirection: "row",
+            justifyContent: "space-between",
+        },
+        text: {
+            fontFamily: "Inter_600SemiBold",
+            fontSize: 14,
+            color: "white"
+        },
+        name: {
+            fontSize: 19,
+            fontFamily: "Inter_900Black",
+            paddingBottom: 20,
+            color: "white"
+
+        },
     });
 
     const [image, setImage] = useState(null);
-    const userState = useSelector(state => state.user.user)
+    const userState = useSelector((state) => state.user.user);
     const dispatch = useDispatch();
 
     useEffect(() => {
         getPermissionAsync();
-        console.log("Got permissions");
     }, []);
 
     const getPermissionAsync = async () => {
@@ -56,9 +72,9 @@ const ProfileBanner = () => {
 
                 // ImagePicker saves the taken photo to disk and returns a local URI to it
                 let localUri = result.uri;
-                console.log(result.uri)
+                console.log(result.uri);
                 let filename = localUri.split("/").pop();
-                console.log(filename)
+                console.log(filename);
 
                 // Infer the type of the image
                 let match = /\.(\w+)$/.exec(filename);
@@ -81,19 +97,25 @@ const ProfileBanner = () => {
     };
     return (
         <View style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
-            <TouchableRipple
-                onPress={pickImage}
-                rippleColor="rgba(0, 0, 0, .0)"
-            >
-                <Avatar.Image size={80} source={image ? {uri: image} : {uri: BASE_URL + userState.image}}/>
+            <TouchableRipple onPress={pickImage} rippleColor="rgba(0, 0, 0, .0)">
+                <Avatar.Image
+                    size={80}
+                    source={image ? {uri: image} : {uri: BASE_URL + userState.image}}
+                />
             </TouchableRipple>
             <View style={{marginTop: 10}}>
-                <Text style={{fontSize: 19, fontFamily: "Inter_900Black"}}>{userState.name}</Text>
+                <Text style={styles.name}>{userState.name}</Text>
             </View>
-            {/*<Button title="Pick an image from camera roll!" onPress={pickImage}/>
-            {image && (
-                <Image source={{uri: image}} style={{width: 200, height: 200}}/>
-            )}*/}
+            <View style={styles.actionsCounter}>
+                <Text style={styles.text}>Saved</Text>
+                <Text style={styles.text}>Watch Later</Text>
+                <Text style={styles.text}>Reviews</Text>
+            </View>
+            <View style={styles.actionsCounter}>
+                <Text style={styles.text}>20</Text>
+                <Text style={styles.text}>5</Text>
+                <Text style={styles.text}>25</Text>
+            </View>
         </View>
     );
 };
