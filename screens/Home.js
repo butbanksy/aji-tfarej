@@ -1,23 +1,14 @@
-import React, {useEffect, useState} from "react";
-import {
-    Button,
-    Text,
-    Surface,
-    useTheme,
-    TouchableRipple,
-    Avatar,
-} from "react-native-paper";
-import {StyleSheet, View, Dimensions, ScrollView} from "react-native";
-import {useSelector, useDispatch} from "react-redux";
+import React, {useEffect} from "react";
+import {Surface, useTheme,} from "react-native-paper";
+import {Dimensions, ScrollView, StyleSheet, View} from "react-native";
+import {useDispatch, useSelector} from "react-redux";
 import {Header} from "../components/common/Header";
 import SearchBar from "../components/common/SearchBar";
 import {useNavigation} from "@react-navigation/native";
-import {changeTheme} from "../redux/actions/themeActions";
 import SuggestedMovie from "../components/movies/SuggestedMovies";
 import {revokeToken} from "../redux/actions/authActions";
 import axios from "axios";
-import {BASE_API_URL} from "../constants";
-import {setAxiosToken} from "../constants/axiosConfig";
+import {revokeAxiosToken, setAxiosToken} from "../constants/axiosConfig";
 import {setUserInfosRequest} from "../redux/actions/userActions";
 
 export default function Home() {
@@ -58,6 +49,9 @@ export default function Home() {
                 dispatch(setUserInfosRequest(resp.data));
             })
             .catch(() => dispatch(revokeToken()));
+        return () => {
+            revokeAxiosToken();
+        };
     }, []);
 
     return (

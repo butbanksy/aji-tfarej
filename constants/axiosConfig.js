@@ -7,3 +7,9 @@ export const setAxiosToken = (token) => {
     axios.defaults.headers.post["Content-Type"] = "multipart/form-data";
 }
 
+export const revokeAxiosToken = () => {
+    axios.defaults.baseURL = BASE_API_URL;
+    axios.defaults.headers.post["Content-Type"] = "multipart/form-data";
+    console.log("Revooooooked");
+
+}

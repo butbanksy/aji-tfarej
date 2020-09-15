@@ -18,7 +18,7 @@ const ListSettings = () => {
                 title="Theme"
                 description="Enable dark theme"
                 left={(props) => <List.Icon {...props} icon="brightness-4"/>}
-                right={(props) => <ThemeSwitch/>}
+                right={() => <ThemeSwitch/>}
                 onPress={()=>("")}
             />
             <Divider/>

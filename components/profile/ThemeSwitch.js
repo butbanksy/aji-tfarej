@@ -1,5 +1,5 @@
 import React, {useState} from "react"
-import {View, StyleSheet} from "react-native"
+import {StyleSheet} from "react-native"
 import {Switch} from "react-native-paper"
 import {useSelector, useDispatch} from "react-redux";
 import {changeTheme} from "../../redux/actions/themeActions";

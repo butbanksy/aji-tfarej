@@ -13,3 +13,4 @@ export const CHANGE_THEME_LIGHT = "CHANGE_THEME_LIGHT"
 // User actions
 
 export const LOAD_USER_INFOS = "LOAD_USER_INFOS"
+export const UPLOAD_USER_PICTURE = "UPLOAD_USER_PICTURE"

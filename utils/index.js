@@ -1,7 +1,10 @@
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
+import * as Yup from "yup"
 import {setUserInfosRequest} from "../redux/actions/userActions";
 
+
+//For uploading an image to the server
 export const pickImage = async () => {
     try {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -27,13 +30,33 @@ export const pickImage = async () => {
             // Assume "photo" is the name of the form field the server expects
             formData.append("image", {uri: localUri, name: "test", type});
 
-            return axios
-                .post("/photo", formData, {
-                    "Content-Type": "multipart/form-data",
-                })
-                .then((resp) => resp.data);
+            return await formData
         }
     } catch (E) {
         console.log(E);
     }
 };
+
+
+export const uploadUserPicture = async (formData) => {
+     return await axios.post("/photo", formData, {
+        "Content-Type": "multipart/form-data",
+    });
+
+}
+
+
+// Validation schemas
+
+export const signUpSchema = () => Yup.object().shape({
+    fullName: Yup.string()
+        .required("The full name is required")
+        .min(5, "The full name must be at least 5 characters long"),
+    email: Yup.string().email("Please enter a valid email").required("The email is required"),
+    password: Yup.string()
+        .required("The password is required")
+        .min(6, "The password must be at least 6 characters long"),
+    confirmPassword: Yup.string()
+        .oneOf([Yup.ref("password"), null], "Passwords do not match")
+        .required("Password confirmation is required"),
+});

@@ -18,7 +18,7 @@ export const setTokenRequest = (token) => {
     };
 };
 
-export const revokeToken = () => {
+    export const revokeToken = () => {
     return {
         type: REVOKE_TOKEN,
     };

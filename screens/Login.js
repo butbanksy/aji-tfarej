@@ -1,12 +1,6 @@
 import React, {useEffect} from "react";
-import {TextInput, Button, Text, useTheme, TouchableRipple} from "react-native-paper";
-import {
-    StyleSheet,
-    Dimensions,
-    View,
-    Image,
-    KeyboardAvoidingView,
-} from "react-native";
+import {Button, Text, TextInput, TouchableRipple, useTheme} from "react-native-paper";
+import {Dimensions, Image, KeyboardAvoidingView, ScrollView, StyleSheet, View,} from "react-native";
 import {useForm} from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
 import {login} from "../redux/actions/authActions";
@@ -36,7 +30,6 @@ export default function Login({navigation}) {
             paddingTop: 50,
         },
         footerContainer: {
-            flex: 0.1,
             width: "100%",
             alignItems: "center",
         },
@@ -68,7 +61,12 @@ export default function Login({navigation}) {
     });
 
     const authState = useSelector((state) => state.auth);
-    const {register, handleSubmit, setValue} = useForm();
+    const {register, handleSubmit, setValue} = useForm({
+        defaultValues: {
+            email: "mrhazzoul@gmail.com",
+            password: "12345678"
+        }
+    });
     const dispatch = useDispatch();
 
     const onSubmit = (data) => {
@@ -82,65 +80,68 @@ export default function Login({navigation}) {
     }, [register]);
 
     return (
-        <View style={styles.container}>
-            <View style={{flex: 0.9}}>
-                <View style={styles.titleContainer}>
-                    <View>
-                        <Text style={styles.title}>Welcome,</Text>
-                        <Text style={styles.subtitle}>Sign in to continue!</Text>
+            <KeyboardAvoidingView
+                behavior={Platform.OS == "ios" ? "padding" : "height"}
+                style={styles.container}
+            >
+                <View>
+                    <View style={styles.titleContainer}>
+                        <View>
+                            <Text style={styles.title}>Welcome,</Text>
+                            <Text style={styles.subtitle}>Sign in to continue!</Text>
+                        </View>
+                        <View>
+                            <Image
+                                style={{width: width / 5, height: width / 5}}
+                                resizeMode={"contain"}
+                                source={require("../assets/unnamed.png")}
+                            />
+                        </View>
                     </View>
-                    <View>
-                        <Image
-                            style={{width: width / 5, height: width / 5}}
-                            resizeMode={"contain"}
-                            source={require("../assets/unnamed.png")}
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            mode="outlined"
+                            label="Email"
+                            onChangeText={(text) => setValue("email", text)}
+                            placeholder="Enter email address..."
                         />
+                        <TextInput
+                            style={styles.input}
+                            mode="outlined"
+                            label="Password"
+                            placeholder="Enter password..."
+                            onChangeText={(text) => setValue("password", text)}
+                            secureTextEntry={true}
+                        />
+                        <Text style={styles.passwordReset}>Forgot Password?</Text>
+                        <View style={styles.buttonContainer}>
+                            <Button
+                                mode="text"
+                                onPress={handleSubmit(onSubmit)}
+                                loading={authState.loading}
+                            >
+                                Login
+                            </Button>
+                            <Button icon="facebook" mode="text" onPress={() => ""}>
+                                Login with Facebook
+                            </Button>
+                        </View>
                     </View>
                 </View>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        mode="outlined"
-                        label="Email"
-                        onChangeText={(text) => setValue("email", text)}
-                        placeholder="Enter email address..."
-                    />
-                    <TextInput
-                        style={styles.input}
-                        mode="outlined"
-                        label="Password"
-                        placeholder="Enter password..."
-                        onChangeText={(text) => setValue("password", text)}
-                        secureTextEntry={true}
-                    />
-                    <Text style={styles.passwordReset}>Forgot Password?</Text>
-                    <View style={styles.buttonContainer}>
-                        <Button
-                            mode="text"
-                            onPress={handleSubmit(onSubmit)}
-                            loading={authState.loading}
-                        >
-                            Login
-                        </Button>
-                        <Button icon="facebook" mode="text" onPress={() => ""}>
-                            Login with Facebook
-                        </Button>
-                    </View>
-                </View>
-            </View>
 
-            <View style={styles.footerContainer}>
-                <TouchableRipple
-                    rippleColor="rgba(0, 0, 0, .3)"
-                    onPress={() => navigation.navigate("SignUp")}>
-                    <Text style={styles.signUpText}>
-                        Don't have an account?{" "}
-                        <Text style={[styles.signUpText, {color: colors.primary}]}>
-                            Sign Up.
+                <View style={styles.footerContainer}>
+                    <TouchableRipple
+                        rippleColor="rgba(0, 0, 0, .3)"
+                        onPress={() => navigation.navigate("SignUp")}>
+                        <Text style={styles.signUpText}>
+                            Don't have an account?{" "}
+                            <Text style={[styles.signUpText, {color: colors.primary}]}>
+                                Sign Up.
+                            </Text>
                         </Text>
-                    </Text>
-                </TouchableRipple>
-            </View>
-        </View>
-    );
+                    </TouchableRipple>
+                </View>
+            </KeyboardAvoidingView>
+);
 }

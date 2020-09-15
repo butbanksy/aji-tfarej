@@ -1,13 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {Dimensions, StyleSheet, View} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
-import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import {Avatar, Text, TouchableRipple, useTheme} from "react-native-paper";
 import {BASE_URL} from "../../constants";
-import axios from "axios";
 import {setUserInfosRequest} from "../../redux/actions/userActions";
-import {pickImage} from "../../utils";
+import {pickImage, uploadUserPicture} from "../../utils";
 
 const ProfileBanner = () => {
     const {colors} = useTheme();
@@ -46,7 +44,10 @@ const ProfileBanner = () => {
     const dispatch = useDispatch();
 
     const handleImageChange = () => {
-        pickImage().then((userInfos) => dispatch(setUserInfosRequest(userInfos)));
+        const formData = pickImage()
+            .then((formData) => uploadUserPicture(formData))
+            .then((userInfos) => dispatch(setUserInfosRequest(userInfos.data)))
+            .catch((err) => console.log("There was en error: ", err));
     };
 
     useEffect(() => {

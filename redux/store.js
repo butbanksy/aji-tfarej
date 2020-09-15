@@ -12,6 +12,7 @@ const persistConfig = {
     storage: AsyncStorage,
 };
 
+
 const rootReducer = combineReducers({
     auth: authReducer,
     theme: themeReducer,
