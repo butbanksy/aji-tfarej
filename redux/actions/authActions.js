@@ -53,7 +53,10 @@ export const login = ({email, password}) => {
                 dispatch(loginRequestSuccess(access_token));
             })
             .catch((error) => {
-                dispatch(loginRequestFail(error.message));
+
+                error.response.status !== 401 ?
+                dispatch(loginRequestFail("There has been an error. Please try again later.")) :
+                    dispatch(loginRequestFail("Invalid Credentials"))
             });
     };
 };

@@ -1,14 +1,15 @@
 import React, {useEffect} from "react";
 import {Button, Text, TextInput, TouchableRipple, useTheme} from "react-native-paper";
-import {Dimensions, Image, KeyboardAvoidingView, ScrollView, StyleSheet, View,} from "react-native";
+import {Dimensions, Image, KeyboardAvoidingView, StyleSheet, View, Platform} from "react-native";
 import {useForm} from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
 import {login} from "../redux/actions/authActions";
+import {loginSchema} from "../utils/validationSchemas";
+import {yupResolver} from "@hookform/resolvers";
 
 export default function Login({navigation}) {
     const {colors} = useTheme();
     const {width, height} = Dimensions.get("window");
-
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -58,13 +59,18 @@ export default function Login({navigation}) {
             fontFamily: "Inter_600SemiBold",
             fontSize: 16,
         },
-    });
+        textError: {
+            fontFamily: "Inter_400Regular",
+            color: colors.error,
+            fontSize: 14,
+        },
 
+    });
     const authState = useSelector((state) => state.auth);
-    const {register, handleSubmit, setValue} = useForm({
+    const validationSchema = loginSchema();
+    const {register, handleSubmit, setValue, errors} = useForm({
+        resolver: yupResolver(validationSchema),
         defaultValues: {
-            email: "mrhazzoul@gmail.com",
-            password: "12345678"
         }
     });
     const dispatch = useDispatch();
@@ -77,11 +83,14 @@ export default function Login({navigation}) {
     useEffect(() => {
         register("email");
         register("password");
+        return () => {
+            console.log("hh")
+        }
     }, [register]);
 
     return (
             <KeyboardAvoidingView
-                behavior={Platform.OS == "ios" ? "padding" : "height"}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
                 style={styles.container}
             >
                 <View>
@@ -99,21 +108,32 @@ export default function Login({navigation}) {
                         </View>
                     </View>
                     <View style={styles.inputContainer}>
+                        <Text style={styles.textError}>{authState.error}</Text>
                         <TextInput
                             style={styles.input}
                             mode="outlined"
                             label="Email"
                             onChangeText={(text) => setValue("email", text)}
                             placeholder="Enter email address..."
+                            error={errors.email}
                         />
+                        {errors.email ? (
+                            <Text style={styles.textError}>{errors.email.message}</Text>
+                        ) : null}
+
                         <TextInput
                             style={styles.input}
+                            error={errors.password}
                             mode="outlined"
                             label="Password"
                             placeholder="Enter password..."
                             onChangeText={(text) => setValue("password", text)}
                             secureTextEntry={true}
                         />
+                        {errors.password ? (
+                            <Text style={styles.textError}>{errors.password.message}</Text>
+                        ) : null}
+
                         <Text style={styles.passwordReset}>Forgot Password?</Text>
                         <View style={styles.buttonContainer}>
                             <Button

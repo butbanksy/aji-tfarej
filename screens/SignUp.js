@@ -1,15 +1,25 @@
 import React, {useState} from "react";
-import {Dimensions, StyleSheet, View} from "react-native";
+import {Dimensions, StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform} from "react-native";
 import {Controller, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers";
-import {Avatar, Button, Text, TextInput, TouchableRipple, useTheme,} from "react-native-paper";
+import {
+    Avatar,
+    Button,
+    Text,
+    TextInput,
+    TouchableRipple,
+    useTheme,
+} from "react-native-paper";
 import axios from "axios";
-import {pickImage, signUpSchema} from "../utils";
+import {pickImage} from "../utils";
+import {signUpSchema} from "../utils/validationSchemas";
 import {BASE_API_URL} from "../constants";
 
 export default function SignUp() {
     const {colors} = useTheme();
     const {width, height} = Dimensions.get("window");
+    const [isLoading, setIsLoading] = useState(false);
+    const [avatarMessage, setAvatarMessage] = useState("");
     let imageFormData;
 
     const styles = StyleSheet.create({
@@ -17,6 +27,15 @@ export default function SignUp() {
             flex: 1,
             backgroundColor: colors.background,
             padding: 20,
+        },
+        input: {
+            padding: 5,
+        },
+        avatarContainer: {
+            margin: 10,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
         },
         titleContainer: {
             height: height / 5,
@@ -46,9 +65,12 @@ export default function SignUp() {
     const validationSchema = signUpSchema();
     const [image, setImage] = useState(null);
 
-    const {register, handleSubmit, errors, control} = useForm({
+    const {handleSubmit, errors, control} = useForm({
         resolver: yupResolver(validationSchema),
-        defaultValues: {},
+        defaultValues: {
+            email: "mrhazzoul@gmail.com",
+            password: "12345678"
+        },
     });
 
     const handleImageChange = () => {
@@ -66,6 +88,10 @@ export default function SignUp() {
     };
 
     const onSubmit = async (data) => {
+        if (!image){
+            setAvatarMessage("Please pick an avatar.")
+            return;
+        }
         const formData = new FormData();
         formData.append("name", data.fullName);
         formData.append("email", data.email);
@@ -75,14 +101,24 @@ export default function SignUp() {
             name: image.name,
             type: image.type,
         });
-
-        const response = await axios.post(BASE_API_URL + "/register", formData, {
-            "Content-Type": "multipart/form-data",
-        });
+        setIsLoading(true);
+        try {
+            const response = await axios.post(BASE_API_URL + "/register", formData, {
+                "Content-Type": "multipart/form-data",
+            });
+            setIsLoading(false);
+        } catch (err) {
+            console.log(err.message);
+            setIsLoading(false);
+        }
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
+            <KeyboardAvoidingView
+                behavior={Platform.OS == "ios" ? "padding" : "height"}
+            >
+
             <View style={styles.titleContainer}>
                 <View>
                     <Text style={styles.title}>Create Account</Text>
@@ -91,6 +127,19 @@ export default function SignUp() {
                 <View/>
             </View>
             <View>
+                <View style={styles.avatarContainer}>
+                    <Button icon="camera" error={avatarMessage} onPress={handleImageChange}>Pick an avatar </Button>
+                    <Avatar.Image
+                        size={80}
+                        source={
+                            image
+                                ? {uri: image.uri}
+                                : require("../assets/depositphotos_30256231-stock-photo-cinema-dog.jpg")
+                        }
+                    />
+                </View>
+                {avatarMessage ? <Text style={styles.textError}>{avatarMessage} </Text> : null}
+
                 <Controller
                     name="fullName"
                     control={control}
@@ -101,6 +150,7 @@ export default function SignUp() {
                                 onChangeText={(value) => {
                                     onChange(value);
                                 }}
+                                style={styles.input}
                                 mode="outlined"
                                 label="Full Name"
                                 error={errors.fullName}
@@ -121,6 +171,7 @@ export default function SignUp() {
                                 onChangeText={(value) => {
                                     onChange(value);
                                 }}
+                                style={styles.input}
                                 mode="outlined"
                                 label="Email"
                                 error={errors.email}
@@ -141,6 +192,7 @@ export default function SignUp() {
                                 onChangeText={(value) => {
                                     onChange(value);
                                 }}
+                                style={styles.input}
                                 mode="outlined"
                                 label="Password"
                                 error={errors.password}
@@ -162,6 +214,7 @@ export default function SignUp() {
                                 onChangeText={(value) => {
                                     onChange(value);
                                 }}
+                                style={styles.input}
                                 mode="outlined"
                                 label="Confirm password"
                                 error={errors.confirmPassword}
@@ -175,24 +228,12 @@ export default function SignUp() {
                         </>
                     )}
                 />
-
-                <View style={{width: "100%", alignItems: "center"}}>
-                    <TouchableRipple
-                        onPress={handleImageChange}
-                        rippleColor="rgba(0, 0, 0, .0)"
-                    >
-                        <Avatar.Image
-                            size={80}
-                            source={
-                                image
-                                    ? {uri: image.uri}
-                                    : require("../assets/depositphotos_30256231-stock-photo-cinema-dog.jpg")
-                            }
-                        />
-                    </TouchableRipple>
-                </View>
             </View>
-            <Button onPress={handleSubmit(onSubmit)}>Register</Button>
-        </View>
+            <Button loading={isLoading} onPress={handleSubmit(onSubmit)} style={{margin: 10}}>
+                Register
+            </Button>
+            </KeyboardAvoidingView>
+
+        </ScrollView>
     );
 }
